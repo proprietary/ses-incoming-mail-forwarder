@@ -110,12 +110,10 @@ func convertMessage(m *mail.Message) (types.Message, error) {
 			},
 		}
 	} else {
-		var bodyText strings.Builder
-		_, err := io.Copy(&bodyText, m.Body)
+		bodyAsText, err := decode(m.Body, m.Header.Get("Content-Transfer-Encoding"))
 		if err != nil {
-			return types.Message{}, fmt.Errorf("failed to read body: %v", err)
+			return types.Message{}, fmt.Errorf("failed to decode body: %v", err)
 		}
-		bodyAsText := bodyText.String()
 		body = &types.Body{
 			Text: &types.Content{
 				Data: &bodyAsText,
@@ -164,14 +162,19 @@ func parsePart(src io.Reader, boundary string) ([]string, error) {
 
 func decodePart(src *multipart.Part) (string, error) {
 	contentTransferEncoding := strings.ToUpper(src.Header.Get("Content-Transfer-Encoding"))
+	return decode(src, contentTransferEncoding)
+}
+
+func decode(src io.Reader, contentType string) (string, error) {
+	contentType = strings.ToUpper(contentType)
 	switch {
-	case strings.Compare(contentTransferEncoding, "BASE64") == 0: // base64
+	case strings.Compare(contentType, "BASE64") == 0: // base64
 		buf, err := io.ReadAll(base64.NewDecoder(base64.StdEncoding, src))
 		if err != nil {
 			return "", fmt.Errorf("failed to decode base64: %v", err)
 		}
 		return string(buf), nil
-	case strings.Compare(contentTransferEncoding, "QUOTED-PRINTABLE") == 0: // quoted-printable
+	case strings.Compare(contentType, "QUOTED-PRINTABLE") == 0: // quoted-printable
 		buf, err := io.ReadAll(quotedprintable.NewReader(src))
 		if err != nil {
 			return "", fmt.Errorf("failed to decode quoted-printable: %v", err)
