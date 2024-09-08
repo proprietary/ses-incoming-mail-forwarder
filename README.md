@@ -71,3 +71,8 @@ You should see `lambda.zip` in the directory. Upload the ZIP to AWS Lambda an de
 ## 3. Add a trigger for the Lambda
 
 Set the trigger to Put events on the S3 bucket that SES puts incoming emails in.
+
+
+# TODO
+
+- [ ] automation with CloudFormation and/or Terraform
