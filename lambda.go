@@ -26,7 +26,7 @@ type SESClientInterface interface {
 }
 
 func handleRequest(ctx context.Context, s3Event events.S3Event, s3Client S3ClientInterface, sesClient SESClientInterface) error {
-	var forwardToAddress string = os.Getenv("FORWARD_TO_ADDRESS")
+	forwardToAddresses := splitCsv(os.Getenv("FORWARD_TO_ADDRESS"))
 
 	for _, record := range s3Event.Records {
 		bucket := record.S3.Bucket.Name
@@ -64,7 +64,7 @@ func handleRequest(ctx context.Context, s3Event events.S3Event, s3Client S3Clien
 		// Send the email using SES
 		_, err = sesClient.SendEmail(ctx, &ses.SendEmailInput{
 			Destination: &types.Destination{
-				ToAddresses: []string{forwardToAddress},
+				ToAddresses: forwardToAddresses,
 			},
 			Message: &types.Message{
 				Body: &types.Body{
@@ -83,10 +83,14 @@ func handleRequest(ctx context.Context, s3Event events.S3Event, s3Client S3Clien
 			return fmt.Errorf("failed to send email: %v", err)
 		}
 
-		log.Printf("Successfully forwarded email from %s to %s", from, forwardToAddress)
+		log.Printf("Successfully forwarded email from %s to %s", from, forwardToAddresses)
 	}
 
 	return nil
+}
+
+func splitCsv(s string) []string {
+	return strings.Split(s, ",")
 }
 
 func main() {
