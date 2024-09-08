@@ -31,6 +31,9 @@ type SESClientInterface interface {
 
 func handleRequest(ctx context.Context, s3Event events.S3Event, s3Client S3ClientInterface, sesClient SESClientInterface) error {
 	forwardToAddresses := splitCsv(os.Getenv("FORWARD_TO_ADDRESS"))
+	if len(forwardToAddresses) == 0 {
+		return fmt.Errorf("FORWARD_TO_ADDRESS environment variable is not set")
+	}
 
 	for _, record := range s3Event.Records {
 		bucket := record.S3.Bucket.Name
