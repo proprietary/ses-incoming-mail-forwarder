@@ -2,9 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
+	"mime"
+	"mime/multipart"
+	"mime/quotedprintable"
 	"net/mail"
 	"os"
 	"strings"
@@ -50,32 +54,20 @@ func handleRequest(ctx context.Context, s3Event events.S3Event, s3Client S3Clien
 			return fmt.Errorf("failed to parse email: %v", err)
 		}
 
-		subject := msg.Header.Get("Subject")
 		from := msg.Header.Get("From")
 		to := msg.Header.Get("To")
 
-		var bodyBuilder strings.Builder
-		bodyBuilder.WriteString(fmt.Sprintf("From: %s\n", from))
-		bodyBuilder.WriteString(fmt.Sprintf("Subject: %s\n\n", subject))
-		bodyBuilder.WriteString("--- Original message ---\n\n")
-		io.Copy(&bodyBuilder, msg.Body)
-		bodyAsString := bodyBuilder.String()
+		m, err := convertMessage(msg)
+		if err != nil {
+			return fmt.Errorf("failed to convert message: %v", err)
+		}
 
 		// Send the email using SES
 		_, err = sesClient.SendEmail(ctx, &ses.SendEmailInput{
 			Destination: &types.Destination{
 				ToAddresses: forwardToAddresses,
 			},
-			Message: &types.Message{
-				Body: &types.Body{
-					Text: &types.Content{
-						Data: &bodyAsString,
-					},
-				},
-				Subject: &types.Content{
-					Data: &subject,
-				},
-			},
+			Message:          &m,
 			Source:           &to,
 			ReplyToAddresses: []string{from},
 		})
@@ -91,6 +83,104 @@ func handleRequest(ctx context.Context, s3Event events.S3Event, s3Client S3Clien
 
 func splitCsv(s string) []string {
 	return strings.Split(s, ",")
+}
+
+func convertMessage(m *mail.Message) (types.Message, error) {
+	subject := m.Header.Get("Subject")
+
+	// read potentially multipart message
+	var body *types.Body
+	mediaType, params, _ := mime.ParseMediaType(m.Header.Get("Content-Type"))
+	if strings.HasPrefix(mediaType, "multipart/") {
+		parts, err := parsePart(m.Body, params["boundary"])
+		if err != nil {
+			return types.Message{}, fmt.Errorf("failed to parse parts: %v", err)
+		}
+		var bodyText strings.Builder
+		for _, part := range parts {
+			bodyText.WriteString(part)
+		}
+		bodyAsText := bodyText.String()
+		body = &types.Body{
+			Html: &types.Content{
+				Data: &bodyAsText,
+			},
+		}
+	} else {
+		var bodyText strings.Builder
+		_, err := io.Copy(&bodyText, m.Body)
+		if err != nil {
+			return types.Message{}, fmt.Errorf("failed to read body: %v", err)
+		}
+		bodyAsText := bodyText.String()
+		body = &types.Body{
+			Text: &types.Content{
+				Data: &bodyAsText,
+			},
+		}
+	}
+
+	out := types.Message{
+		Subject: &types.Content{
+			Data: &subject,
+		},
+		Body: body,
+	}
+
+	return out, nil
+}
+
+func parsePart(src io.Reader, boundary string) ([]string, error) {
+	mr := multipart.NewReader(src, boundary)
+	var parts []string
+	for {
+		p, err := mr.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to read part: %v", err)
+		}
+		mediaType, params, _ := mime.ParseMediaType(p.Header.Get("Content-Type"))
+		if strings.HasPrefix(mediaType, "multipart/") {
+			subParts, err := parsePart(p, params["boundary"])
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse subpart: %v", err)
+			}
+			parts = append(parts, subParts...)
+		} else {
+			decoded, err := decodePart(p)
+			if err != nil {
+				return nil, fmt.Errorf("failed to decode part: %v", err)
+			}
+			parts = append(parts, string(decoded))
+		}
+	}
+	return parts, nil
+}
+
+func decodePart(src *multipart.Part) (string, error) {
+	contentTransferEncoding := strings.ToUpper(src.Header.Get("Content-Transfer-Encoding"))
+	switch {
+	case strings.Compare(contentTransferEncoding, "BASE64") == 0: // base64
+		buf, err := io.ReadAll(base64.NewDecoder(base64.StdEncoding, src))
+		if err != nil {
+			return "", fmt.Errorf("failed to decode base64: %v", err)
+		}
+		return string(buf), nil
+	case strings.Compare(contentTransferEncoding, "QUOTED-PRINTABLE") == 0: // quoted-printable
+		buf, err := io.ReadAll(quotedprintable.NewReader(src))
+		if err != nil {
+			return "", fmt.Errorf("failed to decode quoted-printable: %v", err)
+		}
+		return string(buf), nil
+	default:
+		buf, err := io.ReadAll(src)
+		if err != nil {
+			return "", fmt.Errorf("failed to read part: %v", err)
+		}
+		return string(buf), nil
+	}
 }
 
 func main() {

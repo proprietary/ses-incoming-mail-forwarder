@@ -1,0 +1,542 @@
+Return-Path: <zelly@outlook.com>
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2078.outbound.protection.outlook.com [40.92.18.78])
+ by inbound-smtp.us-west-1.amazonaws.com with SMTP id geb7b3ukv90b4rk1c5ee4flkgdhcv3rmi04pp8g1
+ for mail@example.com;
+ Sun, 08 Sep 2024 01:15:09 +0000 (UTC)
+X-SES-Spam-Verdict: PASS
+X-SES-Virus-Verdict: PASS
+Received-SPF: pass (spfCheck: domain of outlook.com designates 40.92.18.78 as permitted sender) client-ip=40.92.18.78; envelope-from=zelly@outlook.com; helo=NAM11-CO1-obe.outbound.protection.outlook.com;
+Authentication-Results: amazonses.com;
+ spf=pass (spfCheck: domain of outlook.com designates 40.92.18.78 as permitted sender) client-ip=40.92.18.78; envelope-from=zelly@outlook.com; helo=NAM11-CO1-obe.outbound.protection.outlook.com;
+ dkim=pass header.i=@outlook.com;
+ dmarc=pass header.from=outlook.com;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFFT0FaczU3WUhTMkc1NStiMVVTeHBId05OSER4V1Rzd3JkeVRIc1ovSDdEWDk5SXl2U2Y4bFZFZXUwTXVSVEcvVHhBZi9uaTJwTjlxT05wQUJMYm5rTTM3dEk5TXY1VXMvTHhlU1FPaHpHNEp3RFZIenErUWx3MXVIL2tweU5SN3oyb3c4QUxhMjB1eTcvQUxlZVNvTFdmdnRUbVFPN1ZMdnJ3OE5DaWZBbjR0VFRMSEo5T1JQdSs1TFdNeHh2Z0txdU9zelRpMVpMSkNLQ2RnN0xKL2xoU3BRQnFCb3d5MlZUT1ExNFZKZFdvYVIzV24xcDU1RGtGbWZxY1Zuek51VThSbVlZTjM5QytuUTZ2dFZVTGhENTRtMzJJREJDdm5WVEJuZERwTTBDc3c9PQ==
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=QN9NbYmJB5kG8D9tAK2eKni7nPP+R9TNkAvqSb+LVKCOIGVZh10muNhgicmP3F1rNvQwjtScLRFuiQspVd7mHA9ygOAFZkmtwJqUdF7Z4cpAZarZIFNAT+N8LdXGDCAumALLj7kwR40agjpexqTM84IokmzSzRhxQjrsx6XrhU8=; c=relaxed/simple; s=iek43urnex4zqv5t3opageoatkmhcael; d=amazonses.com; t=1725758110; v=1; bh=IUaE9EvNivusli11gFenESxv9o9Y35+xEfqlhEfV78o=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Dl+9lbR7KF1QMXqR8H6mjlRnMwlBNmtmS6tgxh9MSj7PQQYPyqp6NYpBVDJHtK/BTjBYorhbhu+BbxFSuaXRtNy6qIJ6ksLJ0S2YFhgrqfWL1nRwNS09IlhCMXTcMw/VfNOKzP2LxylWZP/XhBSLNtPE1TWBF3CAFTHlScIjO1kIifTH5wPuuPFcUEFwsvfYLZNiGTHfmeHzCWsfUHF6GZS10Q5nrHGtTQejbj0a6fNIe358cAf0/nCWVuuoe5FSYNEJpCYBVFWg9jFeA41lzl9OxjbLuGhV5z+Ss9ayaeWr8+sbJt/r7bR4XoqWgG9H+OxSA2AMTmOho0b3EJN4Jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IUaE9EvNivusli11gFenESxv9o9Y35+xEfqlhEfV78o=;
+ b=I2mSGOfZpbNXP2j2+wSwP3PXHMJWpeM01PDRnp/aFuLyIJVWPQfNNhGlwTTBBeUFY4H5ZBScfterNbXLncK7/ZM9f9AQKIn6v7mOviisHpBZc4rd6bi4CSoT6FFd8FhBrtYpozqei7t9WNXpzw6Xm+5S9o2owUtr5lr+VUeVUGoG+h2289Ao+Ifpeb5l2zHOqu8+Bhf/yFa5LVbATj/7AF5szgasNUyeoT4+RYNf2mjJUvqiuIQh0mFJrcDB8t64VYCsDAY1CC58reUy5KQAN/EJyp/RQQMvJLlJ1dCX+bakhNlOm+zfjOdI6OotL7SADVTjKOQANzVKO1Dxv6h00Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IUaE9EvNivusli11gFenESxv9o9Y35+xEfqlhEfV78o=;
+ b=UBfNArRBk4CpfySoCnRBUDRAUwV2vZgAY3+VAVXKCX+ux43b+m343H4cxI1ySq/OUFbs+NyPha4pVtlFpJf8Hik8INCkZkxdJEbYxUsgmJrgaGEqFgTdCQFtyLQiprBTb7FrfURB1jUpMRSxkbZUa/DJprDg5nUhWfEdQ7QSAfWN3AewcF1ehMKyWj3hJ57xsv36wJWQPXyy0k4zskW7y6DstkPmbZqXUWDyao7VqKAMngMUNwM03hq2HDb56rsZnWwIIRQrwBJ1duObYhMLy3eygvZT/BW2d/l0oRQFyUMKAYvgohikLmC5P2cJ7vVBYHJWQS1uMVSRHPXtRkNlbw==
+Received: from BY5PR11MB4103.namprd11.prod.outlook.com (2603:10b6:a03:18c::29)
+ by DM6PR11MB4547.namprd11.prod.outlook.com (2603:10b6:5:2a1::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.20; Sun, 8 Sep
+ 2024 01:15:00 +0000
+Received: from BY5PR11MB4103.namprd11.prod.outlook.com
+ ([fe80::4608:72cf:7cf8:ed0b]) by BY5PR11MB4103.namprd11.prod.outlook.com
+ ([fe80::4608:72cf:7cf8:ed0b%5]) with mapi id 15.20.7918.024; Sun, 8 Sep 2024
+ 01:15:00 +0000
+From: Zelly Snyder <zelly@outlook.com>
+To: "mail@example.com" <mail@example.com>
+Subject: test email
+Thread-Topic: test email
+Thread-Index: AQHbAYyGOvDKziuqyEi2aN4GLOHfPQ==
+Date: Sun, 8 Sep 2024 01:14:59 +0000
+Message-ID: <B212450C-419E-4109-B572-62515B0C4EAB@outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn: [Nw2XsoJJ8QKU9o5JRj1L0AhwMPAlPM9FZsstsOo3Db0DcPGhdc99Uc+fFJJT9iUJ]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR11MB4103:EE_|DM6PR11MB4547:EE_
+x-ms-office365-filtering-correlation-id: 7ceab7d2-a8db-4fd9-4dcc-08dccfa3a8d2
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|8060799006|19110799003|9400799024|15080799006|12050799009|461199028|4302099013|3412199025|440099028|102099032|1602099012;
+x-microsoft-antispam-message-info:
+ Yjf7MJJ5GVzlB4BaEqNv53mEI2fU4STJ9+hEvIr9hdmRc4Ma5a4JjtZs38Gi1rDlHDH1bbt0GpPjg8TLWe8/+tiIbuAR20bMx1KR6VWSorqzVmWQpY8/GAID534uyGVE5eQIW9vxV+jFi6k7zMg+Jsf0cjj/mHS4MGEpejyqi6BhTsNKxvp6dIx2TIiqIZzZRe8SO6TwikQUmnGla/c9uYhvdDY/k+GBgiushfnIF9+bf3PDL3z4Qg4ILhzEnNEJuLb9c0JNtXw5r+kSnIoxrRjwoTTiHsI2YuH19EWBgICZFM/PqiKQGVUO7fLM8UNF5NdWIyGX88dro9PIc2BmO0I8scx/H0DY7imeeju5hRyRLRUwhfDVW2qgzDrd2TQp6bT33zW3bobuhR35IrqLcUEqxlJ+Gfukg6p684av0dj3m3Z7UQcuRswQqAwdW1i+kEs6E5yCO37XItxK2abP3Ggz8RgtMDKYm8Q9jq4Y+77ZhQLiAcYhSz05UB/2ShrMLL4/DTVf8wrtU1gbIZVqkKjgdS1fYvtXy2vvPpBve3o1WldYWUlie6sBTRKya+siUa8EGu62hlEOzVs5n/ywlq8dFgMLHk1YqwmM6O0eTiC8YHSgcrOlQEc9RwopBVwana4bk89judNVWCXPvXDkZoof4aFQVK6mnJedxAhTrJI2X5zn70uBWrv3X64qmeF5X6eqZGDNGramtIN0Vf+OJdqqQr99u8zj6rFJmeIWEsKAotDwH4SD2VweRCNvpcKOGBeAh/jZei7F8gCfwtSPWm5+9SWevBPn90rCLD6Zmojy8BHLDjPmIIhQTZhoF/2RbfmPRJY1xlwtJUgdgFuYJaldD5t1x/D35bs3WkkOFmQ=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?tqRE9KIS6ptM2jpZ6T6opClh83rBLEdzn+nq7MihXoSeg6Y8fl1b8a7iQ7zT?=
+ =?us-ascii?Q?oW2LKTRzYL4tMR1WblHJY6bf7r8cZvpvdrxhibO9Z2DSjNhxilKEiP0UlC6N?=
+ =?us-ascii?Q?U3s0HyMrPncLtTZM/w3J3nMjtBYj/o3LXN385nL/p7FdB7FbXHKFfR1i/zLO?=
+ =?us-ascii?Q?KRGSsGpNlYnVcKhiUfvR2phb7OBfdoLMADa/dAD92qrWcWdQbWbKVsoVQABU?=
+ =?us-ascii?Q?cHBgw1so7jwEXCIGi/KMmpZzZFMupJ73Yh+5FrpF0XKSmUdjb982I+3lgr8k?=
+ =?us-ascii?Q?+bXlhzm8PH6U7FtbVnS5CPq/ebE9K4giZYWnfEJ/zSzFQw0DyrShiIVDOdJX?=
+ =?us-ascii?Q?woJgll74+8AjaCZkjJ9ZDW9tNx6rMZhjYzedQ7mL4LrMg0yx5HmRWdTfnpNQ?=
+ =?us-ascii?Q?VK6xh4hIf/dtkfKRrcbxb75dPUYxk8JQMsnOujuIbjawOcvvbk6NsSRlI9UU?=
+ =?us-ascii?Q?ZzdcKiKaWJK3QApcfdds9zhqbl3PnMtGFcVahEeSGJIzn5NR46izXSHsyQvE?=
+ =?us-ascii?Q?oc8cuzEJ1jm4m/hzVYLS7tyAAf9PPL6eV0/nip8opUVVJjmZeICfi7XVkqgN?=
+ =?us-ascii?Q?mCcP8HYFKDo1SU4FaIOmY/0TxoKVf9GqrBIPjoRqoQpoQHG3hR2S8lSHTSeF?=
+ =?us-ascii?Q?OZb3ZKxSaZS+AtWkAwulwUB/ujv6moo/SyeMrYUz6t494TH+rFNx7usqmmqu?=
+ =?us-ascii?Q?UHXJRpjsGUoMZaBQPxZ/ShXew7bDrbYEW/+Jbi6/0v+pejVqH1w0W7b+rgwI?=
+ =?us-ascii?Q?DVkF5iP3cldWJoMJ7JYJPqZdJg8vey213LqS79Fx1w29/6FtVcHNT3XY5+NN?=
+ =?us-ascii?Q?h2LVkj2z7zWAlBnpgfsHKxyHTXd7NBR9zYTdo6pvNIDW3zjTjmsqhsxDkTeM?=
+ =?us-ascii?Q?U3ZywGE3lbSBMNA+ePX0kz5DRahNvIPMBRmyXRbHPQjC69xTClsOw9KLRKhZ?=
+ =?us-ascii?Q?iJzNsAJXyTdNEibh8oIAwj1JrG0wy6QZwWjqsbvp3VTZ0juwSYyBURORkFZI?=
+ =?us-ascii?Q?ie5cCtd178BsMLxDtIjNVrYxD5RtrHxVcIbw7dVzAOD6vbK5RXtKUEBnOeRj?=
+ =?us-ascii?Q?sRSyLDOImMgExDoX5tMnwJgNDLYTmoST7yq2MFsQHTCEdcVW/PpZcIZf1IF+?=
+ =?us-ascii?Q?De08vXHPD1GrkhpIHDnEF7y0j+gqqJGX9LOPPNMHFpZN3c+VUDlHp7M2qVPc?=
+ =?us-ascii?Q?InHX4EPQMho4ivh6yxeZ5pa/FlDjoSZfIyanKDtkcQS++CZwCv4fMcPiYMng?=
+ =?us-ascii?Q?zMbIkpOX4uZDAOLKgZiyKrJ7YjZsyRJnwt28M8zstxnRA+zhFxIxGI5W3YNy?=
+ =?us-ascii?Q?b0c=3D?=
+Content-Type: multipart/alternative;
+	boundary="_000_B212450C419E4109B57262515B0C4EABoutlookcom_"
+MIME-Version: 1.0
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4103.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ceab7d2-a8db-4fd9-4dcc-08dccfa3a8d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2024 01:14:59.8613
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4547
+
+--_000_B212450C419E4109B57262515B0C4EABoutlookcom_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+The convolutional neural network<https://en.wikipedia.org/wiki/Convolutiona=
+l_neural_network> (CNN) architecture with convolutional layers and downsamp=
+ling layers was introduced by Kunihiko Fukushima<https://en.wikipedia.org/w=
+iki/Kunihiko_Fukushima> in 1980.[27]<https://en.wikipedia.org/wiki/Neural_n=
+etwork_(machine_learning)#cite_note-intro-27> He called it the neocognitron=
+<https://en.wikipedia.org/wiki/Neocognitron>. In 1969, he also introduced t=
+he use of ReLU<https://en.wikipedia.org/wiki/Rectifier_(neural_networks)> (=
+rectified linear unit) as an activation function<https://en.wikipedia.org/w=
+iki/Activation_function>.[28]<https://en.wikipedia.org/wiki/Neural_network_=
+(machine_learning)#cite_note-Fukushima1969-28>[29]<https://en.wikipedia.org=
+/wiki/Neural_network_(machine_learning)#cite_note-DLhistory-29> CNNs have b=
+ecome an essential tool for computer vision<https://en.wikipedia.org/wiki/C=
+omputer_vision>.
+
+Backpropagation<https://en.wikipedia.org/wiki/Backpropagation> is an effici=
+ent application of the chain rule<https://en.wikipedia.org/wiki/Chain_rule>=
+ derived by Gottfried Wilhelm Leibniz<https://en.wikipedia.org/wiki/Gottfri=
+ed_Wilhelm_Leibniz> in 1673[30]<https://en.wikipedia.org/wiki/Neural_networ=
+k_(machine_learning)#cite_note-leibniz16762-30> to networks of differentiab=
+le nodes. The terminology "back-propagating errors" was actually introduced=
+ in 1962 by Rosenblatt,[31]<https://en.wikipedia.org/wiki/Neural_network_(m=
+achine_learning)#cite_note-rosenblatt19623-31> but he did not know how to i=
+mplement this, although Henry J. Kelley<https://en.wikipedia.org/wiki/Henry=
+_J._Kelley> had a continuous precursor of backpropagation in 1960 in the co=
+ntext of control theory<https://en.wikipedia.org/wiki/Control_theory>.[32]<=
+https://en.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-k=
+elley19602-32> The modern form of backpropagation was developed multiple ti=
+mes in early 1970s. The earliest published instance was Seppo Linnainmaa<ht=
+tps://en.wikipedia.org/wiki/Seppo_Linnainmaa>'s master thesis (1970).[33]<h=
+ttps://en.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-li=
+n19703-33>[34]<https://en.wikipedia.org/wiki/Neural_network_(machine_learni=
+ng)#cite_note-lin19763-34> Paul Werbos<https://en.wikipedia.org/wiki/Paul_W=
+erbos> developed it independently in 1971,[35]<https://en.wikipedia.org/wik=
+i/Neural_network_(machine_learning)#cite_note-:14-35> but had difficulty pu=
+blishing it until 1982.[36]<https://en.wikipedia.org/wiki/Neural_network_(m=
+achine_learning)#cite_note-werbos19823-36> In 1986, David E. Rumelhart<http=
+s://en.wikipedia.org/wiki/David_E._Rumelhart> et al. popularized backpropag=
+ation.[37]<https://en.wikipedia.org/wiki/Neural_network_(machine_learning)#=
+cite_note-37>
+
+The time delay neural network<https://en.wikipedia.org/wiki/Time_delay_neur=
+al_network> (TDNN) of Alex Waibel<https://en.wikipedia.org/wiki/Alex_Waibel=
+> (1987) combined convolutions and weight sharing and backpropagation.[38]<=
+https://en.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-W=
+aibel1987-38>[39]<https://en.wikipedia.org/wiki/Neural_network_(machine_lea=
+rning)#cite_note-speechsignal-39> Some early demonstrations of CNN included=
+ alphabet recognition,[40]<https://en.wikipedia.org/wiki/Neural_network_(ma=
+chine_learning)#cite_note-wz1988-40>[41]<https://en.wikipedia.org/wiki/Neur=
+al_network_(machine_learning)#cite_note-wz1990-41> and the LeNet<https://en=
+.wikipedia.org/wiki/LeNet> (1989) that recognized handwritten ZIP codes<htt=
+ps://en.wikipedia.org/wiki/Handwriting_recognition> on mail.[42]<https://en=
+.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-LECUN1989-4=
+2> In 1992, max-pooling<https://en.wikipedia.org/wiki/Convolutional_neural_=
+network#Pooling_layer> for CNNs was introduced by Juan Weng et al. to help =
+with least-shift invariance and tolerance to deformation to aid 3D object r=
+ecognition<https://en.wikipedia.org/wiki/3D_object_recognition>.[43]<https:=
+//en.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-Weng199=
+2-43>[44]<https://en.wikipedia.org/wiki/Neural_network_(machine_learning)#c=
+ite_note-Weng19932-44>[45]<https://en.wikipedia.org/wiki/Neural_network_(ma=
+chine_learning)#cite_note-Weng1997-45> LeNet<https://en.wikipedia.org/wiki/=
+LeNet>-5 (1998), a 7-level CNN by Yann LeCun<https://en.wikipedia.org/wiki/=
+Yann_LeCun> et al.,[46]<https://en.wikipedia.org/wiki/Neural_network_(machi=
+ne_learning)#cite_note-lecun98-46> that classifies digits, was applied by s=
+everal banks to recognize hand-written numbers on checks digitized in 32x32=
+ pixel images.
+
+hello
+
+world
+
+--_000_B212450C419E4109B57262515B0C4EABoutlookcom_
+Content-Type: text/html; charset="us-ascii"
+Content-ID: <C7A59CF08320884EB484330E1F6B4268@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body style=3D"overflow-wrap: break-word; -webkit-nbsp-mode: space; line-br=
+eak: after-white-space;">
+<p style=3D"font-size: 16px; margin: 0.5em 0px 1em; color: rgb(32, 33, 34);=
+ font-family: sans-serif; font-variant-ligatures: normal; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); text-decoration-thickness: init=
+ial; text-decoration-style: initial; text-decoration-color: initial;">
+The&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Convolutional_neural_netw=
+ork" title=3D"Convolutional neural network" style=3D"text-decoration: none;=
+ color: rgb(51, 102, 204); background-image: none; background-position: 0% =
+0%; background-size: auto; background-repeat: repeat; background-attachment=
+: scroll; background-origin: padding-box; background-clip: border-box; bord=
+er-radius: 2px; overflow-wrap: break-word;">convolutional
+ neural network</a>&nbsp;(CNN) architecture with convolutional layers and d=
+ownsampling layers was introduced by&nbsp;<a href=3D"https://en.wikipedia.o=
+rg/wiki/Kunihiko_Fukushima" title=3D"Kunihiko Fukushima" style=3D"text-deco=
+ration: none; color: rgb(51, 102, 204); background-image: none; background-=
+position: 0% 0%; background-size: auto; background-repeat: repeat; backgrou=
+nd-attachment: scroll; background-origin: padding-box; background-clip: bor=
+der-box; border-radius: 2px; overflow-wrap: break-word;">Kunihiko
+ Fukushima</a>&nbsp;in 1980.<sup id=3D"cite_ref-intro_27-0" class=3D"refere=
+nce" style=3D"line-height: 1; unicode-bidi: isolate; white-space: nowrap; f=
+ont-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neural_network_=
+(machine_learning)#cite_note-intro-27" style=3D"text-decoration: none; colo=
+r: rgb(51, 102, 204); background-image: none; background-position: 0% 0%; b=
+ackground-size: auto; background-repeat: repeat; background-attachment: scr=
+oll; background-origin: padding-box; background-clip: border-box; border-ra=
+dius: 2px; overflow-wrap: break-word;"><span class=3D"cite-bracket" style=
+=3D"pointer-events: none;">[</span>27<span class=3D"cite-bracket" style=3D"=
+pointer-events: none;">]</span></a></sup>&nbsp;He
+ called it the&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Neocognitron" =
+title=3D"Neocognitron" style=3D"text-decoration: none; color: rgb(51, 102, =
+204); background-image: none; background-position: 0% 0%; background-size: =
+auto; background-repeat: repeat; background-attachment: scroll; background-=
+origin: padding-box; background-clip: border-box; border-radius: 2px; overf=
+low-wrap: break-word;">neocognitron</a>.
+ In 1969, he also introduced the use of&nbsp;<a href=3D"https://en.wikipedi=
+a.org/wiki/Rectifier_(neural_networks)" title=3D"Rectifier (neural networks=
+)" style=3D"text-decoration: none; color: rgb(51, 102, 204); background-ima=
+ge: none; background-position: 0% 0%; background-size: auto; background-rep=
+eat: repeat; background-attachment: scroll; background-origin: padding-box;=
+ background-clip: border-box; border-radius: 2px; overflow-wrap: break-word=
+;">ReLU</a>&nbsp;(rectified
+ linear unit) as an&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Activatio=
+n_function" title=3D"Activation function" style=3D"text-decoration: none; c=
+olor: rgb(51, 102, 204); background-image: none; background-position: 0% 0%=
+; background-size: auto; background-repeat: repeat; background-attachment: =
+scroll; background-origin: padding-box; background-clip: border-box; border=
+-radius: 2px; overflow-wrap: break-word;">activation
+ function</a>.<sup id=3D"cite_ref-Fukushima1969_28-0" class=3D"reference" s=
+tyle=3D"line-height: 1; unicode-bidi: isolate; white-space: nowrap; font-si=
+ze: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neural_network_(machi=
+ne_learning)#cite_note-Fukushima1969-28" style=3D"text-decoration: none; co=
+lor: rgb(51, 102, 204); background-image: none; background-position: 0% 0%;=
+ background-size: auto; background-repeat: repeat; background-attachment: s=
+croll; background-origin: padding-box; background-clip: border-box; border-=
+radius: 2px; overflow-wrap: break-word;"><span class=3D"cite-bracket" style=
+=3D"pointer-events: none;">[</span>28<span class=3D"cite-bracket" style=3D"=
+pointer-events: none;">]</span></a></sup><sup id=3D"cite_ref-DLhistory_29-0=
+" class=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; white=
+-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wik=
+i/Neural_network_(machine_learning)#cite_note-DLhistory-29" style=3D"text-d=
+ecoration: none; color: rgb(51, 102, 204); background-image: none; backgrou=
+nd-position: 0% 0%; background-size: auto; background-repeat: repeat; backg=
+round-attachment: scroll; background-origin: padding-box; background-clip: =
+border-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"=
+cite-bracket" style=3D"pointer-events: none;">[</span>29<span class=3D"cite=
+-bracket" style=3D"pointer-events: none;">]</span></a></sup>&nbsp;CNNs
+ have become an essential tool for&nbsp;<a href=3D"https://en.wikipedia.org=
+/wiki/Computer_vision" title=3D"Computer vision" style=3D"text-decoration: =
+none; color: rgb(51, 102, 204); background-image: none; background-position=
+: 0% 0%; background-size: auto; background-repeat: repeat; background-attac=
+hment: scroll; background-origin: padding-box; background-clip: border-box;=
+ border-radius: 2px; overflow-wrap: break-word;">computer
+ vision</a>.</p>
+<p style=3D"font-size: 16px; margin: 0.5em 0px 1em; color: rgb(32, 33, 34);=
+ font-family: sans-serif; font-variant-ligatures: normal; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); text-decoration-thickness: init=
+ial; text-decoration-style: initial; text-decoration-color: initial;">
+<a href=3D"https://en.wikipedia.org/wiki/Backpropagation" title=3D"Backprop=
+agation" style=3D"text-decoration: none; color: rgb(51, 102, 204); backgrou=
+nd-image: none; background-position: 0% 0%; background-size: auto; backgrou=
+nd-repeat: repeat; background-attachment: scroll; background-origin: paddin=
+g-box; background-clip: border-box; border-radius: 2px; overflow-wrap: brea=
+k-word;">Backpropagation</a>&nbsp;is
+ an efficient application of the&nbsp;<a href=3D"https://en.wikipedia.org/w=
+iki/Chain_rule" title=3D"Chain rule" style=3D"text-decoration: none; color:=
+ rgb(51, 102, 204); background-image: none; background-position: 0% 0%; bac=
+kground-size: auto; background-repeat: repeat; background-attachment: scrol=
+l; background-origin: padding-box; background-clip: border-box; border-radi=
+us: 2px; overflow-wrap: break-word;">chain
+ rule</a>&nbsp;derived by&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Got=
+tfried_Wilhelm_Leibniz" title=3D"Gottfried Wilhelm Leibniz" style=3D"text-d=
+ecoration: none; color: rgb(51, 102, 204); background-image: none; backgrou=
+nd-position: 0% 0%; background-size: auto; background-repeat: repeat; backg=
+round-attachment: scroll; background-origin: padding-box; background-clip: =
+border-box; border-radius: 2px; overflow-wrap: break-word;">Gottfried
+ Wilhelm Leibniz</a>&nbsp;in 1673<sup id=3D"cite_ref-leibniz16762_30-0" cla=
+ss=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; white-spac=
+e: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neu=
+ral_network_(machine_learning)#cite_note-leibniz16762-30" style=3D"text-dec=
+oration: none; color: rgb(51, 102, 204); background-image: none; background=
+-position: 0% 0%; background-size: auto; background-repeat: repeat; backgro=
+und-attachment: scroll; background-origin: padding-box; background-clip: bo=
+rder-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"ci=
+te-bracket" style=3D"pointer-events: none;">[</span>30<span class=3D"cite-b=
+racket" style=3D"pointer-events: none;">]</span></a></sup>&nbsp;to
+ networks of differentiable nodes. The terminology &quot;back-propagating e=
+rrors&quot; was actually introduced in 1962 by Rosenblatt,<sup id=3D"cite_r=
+ef-rosenblatt19623_31-0" class=3D"reference" style=3D"line-height: 1; unico=
+de-bidi: isolate; white-space: nowrap; font-size: 12.8px;"><a href=3D"https=
+://en.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-rosenb=
+latt19623-31" style=3D"text-decoration: none; color: rgb(51, 102, 204); bac=
+kground-image: none; background-position: 0% 0%; background-size: auto; bac=
+kground-repeat: repeat; background-attachment: scroll; background-origin: p=
+adding-box; background-clip: border-box; border-radius: 2px; overflow-wrap:=
+ break-word;"><span class=3D"cite-bracket" style=3D"pointer-events: none;">=
+[</span>31<span class=3D"cite-bracket" style=3D"pointer-events: none;">]</s=
+pan></a></sup>&nbsp;but
+ he did not know how to implement this, although&nbsp;<a href=3D"https://en=
+.wikipedia.org/wiki/Henry_J._Kelley" title=3D"Henry J. Kelley" style=3D"tex=
+t-decoration: none; color: rgb(51, 102, 204); background-image: none; backg=
+round-position: 0% 0%; background-size: auto; background-repeat: repeat; ba=
+ckground-attachment: scroll; background-origin: padding-box; background-cli=
+p: border-box; border-radius: 2px; overflow-wrap: break-word;">Henry
+ J. Kelley</a>&nbsp;had a continuous precursor of backpropagation in 1960 i=
+n the context of&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Control_theo=
+ry" title=3D"Control theory" style=3D"text-decoration: none; color: rgb(51,=
+ 102, 204); background-image: none; background-position: 0% 0%; background-=
+size: auto; background-repeat: repeat; background-attachment: scroll; backg=
+round-origin: padding-box; background-clip: border-box; border-radius: 2px;=
+ overflow-wrap: break-word;">control
+ theory</a>.<sup id=3D"cite_ref-kelley19602_32-0" class=3D"reference" style=
+=3D"line-height: 1; unicode-bidi: isolate; white-space: nowrap; font-size: =
+12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neural_network_(machine_l=
+earning)#cite_note-kelley19602-32" style=3D"text-decoration: none; color: r=
+gb(51, 102, 204); background-image: none; background-position: 0% 0%; backg=
+round-size: auto; background-repeat: repeat; background-attachment: scroll;=
+ background-origin: padding-box; background-clip: border-box; border-radius=
+: 2px; overflow-wrap: break-word;"><span class=3D"cite-bracket" style=3D"po=
+inter-events: none;">[</span>32<span class=3D"cite-bracket" style=3D"pointe=
+r-events: none;">]</span></a></sup>&nbsp;The
+ modern form of backpropagation was developed multiple times in early 1970s=
+. The earliest published instance was&nbsp;<a href=3D"https://en.wikipedia.=
+org/wiki/Seppo_Linnainmaa" title=3D"Seppo Linnainmaa" style=3D"text-decorat=
+ion: none; color: rgb(51, 102, 204); background-image: none; background-pos=
+ition: 0% 0%; background-size: auto; background-repeat: repeat; background-=
+attachment: scroll; background-origin: padding-box; background-clip: border=
+-box; border-radius: 2px; overflow-wrap: break-word;">Seppo
+ Linnainmaa</a>'s master thesis (1970).<sup id=3D"cite_ref-lin19703_33-0" c=
+lass=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; white-sp=
+ace: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/N=
+eural_network_(machine_learning)#cite_note-lin19703-33" style=3D"text-decor=
+ation: none; color: rgb(51, 102, 204); background-image: none; background-p=
+osition: 0% 0%; background-size: auto; background-repeat: repeat; backgroun=
+d-attachment: scroll; background-origin: padding-box; background-clip: bord=
+er-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"cite=
+-bracket" style=3D"pointer-events: none;">[</span>33<span class=3D"cite-bra=
+cket" style=3D"pointer-events: none;">]</span></a></sup><sup id=3D"cite_ref=
+-lin19763_34-0" class=3D"reference" style=3D"line-height: 1; unicode-bidi: =
+isolate; white-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wik=
+ipedia.org/wiki/Neural_network_(machine_learning)#cite_note-lin19763-34" st=
+yle=3D"text-decoration: none; color: rgb(51, 102, 204); background-image: n=
+one; background-position: 0% 0%; background-size: auto; background-repeat: =
+repeat; background-attachment: scroll; background-origin: padding-box; back=
+ground-clip: border-box; border-radius: 2px; overflow-wrap: break-word;"><s=
+pan class=3D"cite-bracket" style=3D"pointer-events: none;">[</span>34<span =
+class=3D"cite-bracket" style=3D"pointer-events: none;">]</span></a></sup>&n=
+bsp;<a href=3D"https://en.wikipedia.org/wiki/Paul_Werbos" title=3D"Paul Wer=
+bos" style=3D"text-decoration: none; color: rgb(51, 102, 204); background-i=
+mage: none; background-position: 0% 0%; background-size: auto; background-r=
+epeat: repeat; background-attachment: scroll; background-origin: padding-bo=
+x; background-clip: border-box; border-radius: 2px; overflow-wrap: break-wo=
+rd;">Paul
+ Werbos</a>&nbsp;developed it independently in 1971,<sup id=3D"cite_ref-:14=
+_35-0" class=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; =
+white-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.or=
+g/wiki/Neural_network_(machine_learning)#cite_note-:14-35" style=3D"text-de=
+coration: none; color: rgb(51, 102, 204); background-image: none; backgroun=
+d-position: 0% 0%; background-size: auto; background-repeat: repeat; backgr=
+ound-attachment: scroll; background-origin: padding-box; background-clip: b=
+order-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"c=
+ite-bracket" style=3D"pointer-events: none;">[</span>35<span class=3D"cite-=
+bracket" style=3D"pointer-events: none;">]</span></a></sup>&nbsp;but
+ had difficulty publishing it until 1982.<sup id=3D"cite_ref-werbos19823_36=
+-0" class=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; whi=
+te-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/w=
+iki/Neural_network_(machine_learning)#cite_note-werbos19823-36" style=3D"te=
+xt-decoration: none; color: rgb(51, 102, 204); background-image: none; back=
+ground-position: 0% 0%; background-size: auto; background-repeat: repeat; b=
+ackground-attachment: scroll; background-origin: padding-box; background-cl=
+ip: border-box; border-radius: 2px; overflow-wrap: break-word;"><span class=
+=3D"cite-bracket" style=3D"pointer-events: none;">[</span>36<span class=3D"=
+cite-bracket" style=3D"pointer-events: none;">]</span></a></sup>&nbsp;In
+ 1986,&nbsp;<a href=3D"https://en.wikipedia.org/wiki/David_E._Rumelhart" cl=
+ass=3D"mw-redirect" title=3D"David E. Rumelhart" style=3D"text-decoration: =
+none; color: rgb(51, 102, 204); background-image: none; background-position=
+: 0% 0%; background-size: auto; background-repeat: repeat; background-attac=
+hment: scroll; background-origin: padding-box; background-clip: border-box;=
+ border-radius: 2px; overflow-wrap: break-word;">David
+ E. Rumelhart</a>&nbsp;et al. popularized backpropagation.<sup id=3D"cite_r=
+ef-37" class=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; =
+white-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.or=
+g/wiki/Neural_network_(machine_learning)#cite_note-37" style=3D"text-decora=
+tion: none; color: rgb(51, 102, 204); background-image: none; background-po=
+sition: 0% 0%; background-size: auto; background-repeat: repeat; background=
+-attachment: scroll; background-origin: padding-box; background-clip: borde=
+r-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"cite-=
+bracket" style=3D"pointer-events: none;">[</span>37<span class=3D"cite-brac=
+ket" style=3D"pointer-events: none;">]</span></a></sup></p>
+<p style=3D"font-size: 16px; margin: 0.5em 0px 1em; color: rgb(32, 33, 34);=
+ font-family: sans-serif; font-variant-ligatures: normal; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); text-decoration-thickness: init=
+ial; text-decoration-style: initial; text-decoration-color: initial;">
+The&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Time_delay_neural_network=
+" title=3D"Time delay neural network" style=3D"text-decoration: none; color=
+: rgb(51, 102, 204); background-image: none; background-position: 0% 0%; ba=
+ckground-size: auto; background-repeat: repeat; background-attachment: scro=
+ll; background-origin: padding-box; background-clip: border-box; border-rad=
+ius: 2px; overflow-wrap: break-word;">time
+ delay neural network</a>&nbsp;(TDNN) of&nbsp;<a href=3D"https://en.wikiped=
+ia.org/wiki/Alex_Waibel" title=3D"Alex Waibel" style=3D"text-decoration: no=
+ne; color: rgb(51, 102, 204); background-image: none; background-position: =
+0% 0%; background-size: auto; background-repeat: repeat; background-attachm=
+ent: scroll; background-origin: padding-box; background-clip: border-box; b=
+order-radius: 2px; overflow-wrap: break-word;">Alex
+ Waibel</a>&nbsp;(1987) combined convolutions and weight sharing and backpr=
+opagation.<sup id=3D"cite_ref-Waibel1987_38-0" class=3D"reference" style=3D=
+"line-height: 1; unicode-bidi: isolate; white-space: nowrap; font-size: 12.=
+8px;"><a href=3D"https://en.wikipedia.org/wiki/Neural_network_(machine_lear=
+ning)#cite_note-Waibel1987-38" style=3D"text-decoration: none; color: rgb(5=
+1, 102, 204); background-image: none; background-position: 0% 0%; backgroun=
+d-size: auto; background-repeat: repeat; background-attachment: scroll; bac=
+kground-origin: padding-box; background-clip: border-box; border-radius: 2p=
+x; overflow-wrap: break-word;"><span class=3D"cite-bracket" style=3D"pointe=
+r-events: none;">[</span>38<span class=3D"cite-bracket" style=3D"pointer-ev=
+ents: none;">]</span></a></sup><sup id=3D"cite_ref-speechsignal_39-0" class=
+=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; white-space:=
+ nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neura=
+l_network_(machine_learning)#cite_note-speechsignal-39" style=3D"text-decor=
+ation: none; color: rgb(51, 102, 204); background-image: none; background-p=
+osition: 0% 0%; background-size: auto; background-repeat: repeat; backgroun=
+d-attachment: scroll; background-origin: padding-box; background-clip: bord=
+er-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"cite=
+-bracket" style=3D"pointer-events: none;">[</span>39<span class=3D"cite-bra=
+cket" style=3D"pointer-events: none;">]</span></a></sup>&nbsp;Some
+ early demonstrations of CNN included alphabet recognition,<sup id=3D"cite_=
+ref-wz1988_40-0" class=3D"reference" style=3D"line-height: 1; unicode-bidi:=
+ isolate; white-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wi=
+kipedia.org/wiki/Neural_network_(machine_learning)#cite_note-wz1988-40" sty=
+le=3D"text-decoration: none; color: rgb(51, 102, 204); background-image: no=
+ne; background-position: 0% 0%; background-size: auto; background-repeat: r=
+epeat; background-attachment: scroll; background-origin: padding-box; backg=
+round-clip: border-box; border-radius: 2px; overflow-wrap: break-word;"><sp=
+an class=3D"cite-bracket" style=3D"pointer-events: none;">[</span>40<span c=
+lass=3D"cite-bracket" style=3D"pointer-events: none;">]</span></a></sup><su=
+p id=3D"cite_ref-wz1990_41-0" class=3D"reference" style=3D"line-height: 1; =
+unicode-bidi: isolate; white-space: nowrap; font-size: 12.8px;"><a href=3D"=
+https://en.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-w=
+z1990-41" style=3D"text-decoration: none; color: rgb(51, 102, 204); backgro=
+und-image: none; background-position: 0% 0%; background-size: auto; backgro=
+und-repeat: repeat; background-attachment: scroll; background-origin: paddi=
+ng-box; background-clip: border-box; border-radius: 2px; overflow-wrap: bre=
+ak-word;"><span class=3D"cite-bracket" style=3D"pointer-events: none;">[</s=
+pan>41<span class=3D"cite-bracket" style=3D"pointer-events: none;">]</span>=
+</a></sup>&nbsp;and
+ the&nbsp;<a href=3D"https://en.wikipedia.org/wiki/LeNet" title=3D"LeNet" s=
+tyle=3D"text-decoration: none; color: rgb(51, 102, 204); background-image: =
+none; background-position: 0% 0%; background-size: auto; background-repeat:=
+ repeat; background-attachment: scroll; background-origin: padding-box; bac=
+kground-clip: border-box; border-radius: 2px; overflow-wrap: break-word;">L=
+eNet</a>&nbsp;(1989)
+ that&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Handwriting_recognition=
+" title=3D"Handwriting recognition" style=3D"text-decoration: none; color: =
+rgb(51, 102, 204); background-image: none; background-position: 0% 0%; back=
+ground-size: auto; background-repeat: repeat; background-attachment: scroll=
+; background-origin: padding-box; background-clip: border-box; border-radiu=
+s: 2px; overflow-wrap: break-word;">recognized
+ handwritten ZIP codes</a>&nbsp;on mail.<sup id=3D"cite_ref-LECUN1989_42-0"=
+ class=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; white-=
+space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki=
+/Neural_network_(machine_learning)#cite_note-LECUN1989-42" style=3D"text-de=
+coration: none; color: rgb(51, 102, 204); background-image: none; backgroun=
+d-position: 0% 0%; background-size: auto; background-repeat: repeat; backgr=
+ound-attachment: scroll; background-origin: padding-box; background-clip: b=
+order-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"c=
+ite-bracket" style=3D"pointer-events: none;">[</span>42<span class=3D"cite-=
+bracket" style=3D"pointer-events: none;">]</span></a></sup>&nbsp;In
+ 1992,&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Convolutional_neural_n=
+etwork#Pooling_layer" title=3D"Convolutional neural network" style=3D"text-=
+decoration: none; color: rgb(51, 102, 204); background-image: none; backgro=
+und-position: 0% 0%; background-size: auto; background-repeat: repeat; back=
+ground-attachment: scroll; background-origin: padding-box; background-clip:=
+ border-box; border-radius: 2px; overflow-wrap: break-word;">max-pooling</a=
+>&nbsp;for
+ CNNs was introduced by Juan Weng et al. to help with least-shift invarianc=
+e and tolerance to deformation to aid&nbsp;<a href=3D"https://en.wikipedia.=
+org/wiki/3D_object_recognition" title=3D"3D object recognition" style=3D"te=
+xt-decoration: none; color: rgb(51, 102, 204); background-image: none; back=
+ground-position: 0% 0%; background-size: auto; background-repeat: repeat; b=
+ackground-attachment: scroll; background-origin: padding-box; background-cl=
+ip: border-box; border-radius: 2px; overflow-wrap: break-word;">3D
+ object recognition</a>.<sup id=3D"cite_ref-Weng1992_43-0" class=3D"referen=
+ce" style=3D"line-height: 1; unicode-bidi: isolate; white-space: nowrap; fo=
+nt-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neural_network_(=
+machine_learning)#cite_note-Weng1992-43" style=3D"text-decoration: none; co=
+lor: rgb(51, 102, 204); background-image: none; background-position: 0% 0%;=
+ background-size: auto; background-repeat: repeat; background-attachment: s=
+croll; background-origin: padding-box; background-clip: border-box; border-=
+radius: 2px; overflow-wrap: break-word;"><span class=3D"cite-bracket" style=
+=3D"pointer-events: none;">[</span>43<span class=3D"cite-bracket" style=3D"=
+pointer-events: none;">]</span></a></sup><sup id=3D"cite_ref-Weng19932_44-0=
+" class=3D"reference" style=3D"line-height: 1; unicode-bidi: isolate; white=
+-space: nowrap; font-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wik=
+i/Neural_network_(machine_learning)#cite_note-Weng19932-44" style=3D"text-d=
+ecoration: none; color: rgb(51, 102, 204); background-image: none; backgrou=
+nd-position: 0% 0%; background-size: auto; background-repeat: repeat; backg=
+round-attachment: scroll; background-origin: padding-box; background-clip: =
+border-box; border-radius: 2px; overflow-wrap: break-word;"><span class=3D"=
+cite-bracket" style=3D"pointer-events: none;">[</span>44<span class=3D"cite=
+-bracket" style=3D"pointer-events: none;">]</span></a></sup><sup id=3D"cite=
+_ref-Weng1997_45-0" class=3D"reference" style=3D"line-height: 1; unicode-bi=
+di: isolate; white-space: nowrap; font-size: 12.8px;"><a href=3D"https://en=
+.wikipedia.org/wiki/Neural_network_(machine_learning)#cite_note-Weng1997-45=
+" style=3D"text-decoration: none; color: rgb(51, 102, 204); background-imag=
+e: none; background-position: 0% 0%; background-size: auto; background-repe=
+at: repeat; background-attachment: scroll; background-origin: padding-box; =
+background-clip: border-box; border-radius: 2px; overflow-wrap: break-word;=
+"><span class=3D"cite-bracket" style=3D"pointer-events: none;">[</span>45<s=
+pan class=3D"cite-bracket" style=3D"pointer-events: none;">]</span></a></su=
+p>&nbsp;<a href=3D"https://en.wikipedia.org/wiki/LeNet" title=3D"LeNet" sty=
+le=3D"text-decoration: none; color: rgb(51, 102, 204); background-image: no=
+ne; background-position: 0% 0%; background-size: auto; background-repeat: r=
+epeat; background-attachment: scroll; background-origin: padding-box; backg=
+round-clip: border-box; border-radius: 2px; overflow-wrap: break-word;">LeN=
+et</a>-5
+ (1998), a 7-level CNN by&nbsp;<a href=3D"https://en.wikipedia.org/wiki/Yan=
+n_LeCun" title=3D"Yann LeCun" style=3D"text-decoration: none; color: rgb(51=
+, 102, 204); background-image: none; background-position: 0% 0%; background=
+-size: auto; background-repeat: repeat; background-attachment: scroll; back=
+ground-origin: padding-box; background-clip: border-box; border-radius: 2px=
+; overflow-wrap: break-word;">Yann
+ LeCun</a>&nbsp;et al.,<sup id=3D"cite_ref-lecun98_46-0" class=3D"reference=
+" style=3D"line-height: 1; unicode-bidi: isolate; white-space: nowrap; font=
+-size: 12.8px;"><a href=3D"https://en.wikipedia.org/wiki/Neural_network_(ma=
+chine_learning)#cite_note-lecun98-46" style=3D"text-decoration: none; color=
+: rgb(51, 102, 204); background-image: none; background-position: 0% 0%; ba=
+ckground-size: auto; background-repeat: repeat; background-attachment: scro=
+ll; background-origin: padding-box; background-clip: border-box; border-rad=
+ius: 2px; overflow-wrap: break-word;"><span class=3D"cite-bracket" style=3D=
+"pointer-events: none;">[</span>46<span class=3D"cite-bracket" style=3D"poi=
+nter-events: none;">]</span></a></sup>&nbsp;that
+ classifies digits, was applied by several banks to recognize hand-written =
+numbers on checks digitized in 32x32 pixel images.</p>
+hello
+<div><br>
+</div>
+<div>world</div>
+</body>
+</html>
+
+--_000_B212450C419E4109B57262515B0C4EABoutlookcom_--
